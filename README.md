@@ -2,7 +2,7 @@
 
 Códigos para geração dos relatórios (avaliação alfa, beta e final) dos jogos apresentados na disciplina de Jogos Digitais para Console do curso de Jogos Digitais (6º semestre) da [Faculdade de Tecnologia de Americana](http://www.fatec.edu.br/).  
 
-### Arquivo do .xlsx gerado pela Planilha do Google
+### Arquivo .xlsx gerado pela Planilha do Google
 
 <p align="center">
   <img src="https://github.com/kleberandrade/report-python-docx/blob/master/Figures/Excel.PNG" height="400"/>
@@ -10,11 +10,21 @@ Códigos para geração dos relatórios (avaliação alfa, beta e final) dos jog
 
 ### Ambiente Spyder para desenvolvimento
 
+Instalar a biblioteca python-docx usando pip
+
+    python -m pip install --upgrade pip
+    pip install python-docx
+    
+Instalar a biblioteca python-docx usando conda
+
+    conda install -c conda-forge python-docx
+    conda install -c conda-forge/label/gcc7 python-docx 
+
 <p align="center">
   <img src="https://github.com/kleberandrade/report-python-docx/blob/master/Figures/Spyder_IDE.PNG" height="400"/>
 </p>
 
-### Arquivo do .docx gerado pelo código
+### Arquivo .docx gerado pelo código
 
 <p align="center">
   <img src="https://github.com/kleberandrade/report-python-docx/blob/master/Figures/Word.PNG" height="400"/>
