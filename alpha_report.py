@@ -39,7 +39,7 @@ from datetime import date
     del *.png
     del *.docx
 """
-os.system('clear.bat')
+#os.system('clear.bat')
 
 
 # -----------------------------------------------------------------------------
