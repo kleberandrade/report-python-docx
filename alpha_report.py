@@ -15,6 +15,7 @@ Created on Tue Oct  9 15:33:26 2018
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
+import numpy.core.defchararray as np_f
 
 
 # -----------------------------------------------------------------------------
@@ -185,7 +186,11 @@ def plot_pie(filename, data1, data2):
     labels, counts_elements = np.unique(data2, return_counts=True)
     slices = np.round(counts_elements / length * 100,1 )
     
-    patches, texts, autotexts = axes[1].pie(slices, labels=labels, autopct='%.1f%%', startangle=90, counterclock=False)
+    # Convertendo os labels para string e adicionando caracter de escape no $ (latex)
+    labels_str = labels.astype(str)
+    labels_str = np_f.replace(labels_str, '$', '\$')
+    
+    patches, texts, autotexts = axes[1].pie(slices, labels=labels_str, autopct='%.1f%%', startangle=90, counterclock=False)
     axes[1].set_title(COLUMN_PAY, fontsize=8)
     axes[1].axis('equal')
     
