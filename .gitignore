@@ -113,3 +113,4 @@ reports/
 .ruff_cache/
 coverage.lcov
 !examples/*.docx
+*.inspect.ndjson

@@ -1,0 +1,4 @@
+include requirements-dev.lock
+include alpha_report.py beta_report_send_email.py stopwords.txt
+recursive-include examples *.xlsx *.docx
+recursive-include docs *.md

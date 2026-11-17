@@ -148,7 +148,10 @@ def load_evaluations(path: Path, stage="alpha", sheet=None):
     if Path(path).suffix.lower() != ".xlsx":
         raise ValueError("Input must be an .xlsx file")
     schema = SCHEMAS[stage]
-    book = load_workbook(path, read_only=True, data_only=False, keep_links=False)
+    try:
+        book = load_workbook(path, read_only=True, data_only=False, keep_links=False)
+    except (KeyError, SyntaxError) as error:
+        raise ValueError("Invalid XLSX workbook structure") from error
     try:
         if sheet is not None and sheet not in book.sheetnames:
             raise ValueError(f"Worksheet not found: {sheet}")

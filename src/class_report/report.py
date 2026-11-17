@@ -29,6 +29,8 @@ def configure(document):
     normal.paragraph_format.space_after = Pt(7)
     normal.paragraph_format.line_spacing = 1.1
     document.styles["Title"].font.size = Pt(26)
+    for border in list(document.styles["Title"].element.iter(qn("w:pBdr"))):
+        border.getparent().remove(border)
     document.styles["Heading 1"].font.size = Pt(15)
     section.header.paragraphs[0].text = "AVALIAÇÃO ACADÊMICA  /  JOGOS DIGITAIS"
     footer = section.footer.paragraphs[0]

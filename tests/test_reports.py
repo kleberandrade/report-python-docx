@@ -168,3 +168,22 @@ def test_control_characters_rejected():
     with pytest.raises(ValueError, match="control character"):
         text("bad\x00value")
     assert text("ação\nportuguesa") == "ação\nportuguesa"
+
+
+def test_title_has_no_decorative_border(tmp_path):
+    from docx.oxml.ns import qn
+
+    doc = Document(generate_reports(load_evaluations(workbook(tmp_path)), tmp_path / "out")[0])
+    assert not list(doc.styles["Title"].element.iter(qn("w:pBdr")))
+
+
+def test_invalid_ooxml_has_friendly_error(tmp_path, capsys):
+    from zipfile import ZipFile
+    from class_report.cli import main
+
+    path = tmp_path / "invalid.xlsx"
+    with ZipFile(path, "w") as archive:
+        archive.writestr("[Content_Types].xml", "<broken")
+    with pytest.raises(SystemExit) as error:
+        main([str(path)])
+    assert error.value.code == 2 and "error:" in capsys.readouterr().err
