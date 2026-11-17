@@ -106,3 +106,10 @@ venv.bak/
 # results
 *.docx
 *.png
+
+# Generated reports and local QA
+reports/
+.metrics/
+.ruff_cache/
+coverage.lcov
+!examples/*.docx

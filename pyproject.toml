@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "class-report-docx"
+version = "1.0.0"
+description = "Local academic game evaluation reports from Excel to DOCX"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{name = "Kleber de Oliveira Andrade"}]
+dependencies = ["python-docx==1.2.0", "openpyxl==3.1.5"]
+
+[project.scripts]
+class-report = "class_report.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
