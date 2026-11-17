@@ -30,3 +30,10 @@
 - Hosting awaits confirmation of a workspace that satisfies the no-paid-services constraint. No plans or payments were changed.
 - The database editor requires direct identity verification by its owner. Left the verification page open. Did not request the code in chat, retrieve connection secrets, run migrations, configure credentials, or claim live persistence.
 - Approval review rejected an unpublished documentation push containing private resource metadata. Removed resource identifiers, private console links, and account-specific details from the local commit before retrying publication. Account screenshots remain local and ignored by Git.
+
+## Production activation
+
+- Published the web application at https://class-report-forms.vercel.app with the deployment marked Ready, using the existing workspace selected by the user. No plan changes, upgrades, or payments were performed.
+- Connected the dedicated Free Neon database to Production only; connection values remain server-only secrets and were not retrieved or copied into the repository.
+- After the owner completed verification in the official Neon console, applied the committed table and index definitions successfully. Submitted one fictional alpha evaluation and one fictional beta evaluation through the public forms. Both displayed a saved confirmation; a database query confirmed exactly one row for each stage.
+- Confirmed the owner saved the teacher export password as a Production secret. After direct owner identity verification, the redeployment completed with Ready status and the canonical production domain. Authenticated cloud export and its CSV-to-DOCX round trip remain unverified because no teacher key was entered in the export form. No credential was retrieved or exposed for testing.

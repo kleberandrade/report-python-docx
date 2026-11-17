@@ -55,11 +55,11 @@ The web application collects responses and exports data. DOCX generation runs in
 
 After explicit user approval, a dedicated Neon **Free** database named `class-report-forms` was provisioned in São Paulo (`gru1`). Auth and Realtime were disabled. Resource identifiers and account console links are intentionally kept out of public documentation.
 
-No website deployment is claimed yet. Hosting is awaiting confirmation of a workspace compatible with the user's no-paid-services constraint. No plan changes, upgrades, or payments were attempted.
+The test website is published at [class-report-forms.vercel.app](https://class-report-forms.vercel.app), with the production deployment marked Ready. The user selected the existing hosting workspace. No plan changes, upgrades, or payments were attempted.
 
-The database editor requires direct identity verification by the account owner. No verification code or connection secret was requested in chat. The schema migration has **not** been applied, no application connection has been configured, and no successful cloud submission is claimed.
+The dedicated database is connected to Production, with connection variables stored as secrets. After the account owner completed Neon verification, the schema was applied successfully to the dedicated database. Fictional alpha and beta evaluations submitted through the public forms both displayed the saved confirmation; a direct database count confirmed one persisted response per stage. The account owner saved the teacher export password as a Production secret. After direct owner verification, a new deployment completed with Ready status and the current production domain. Authenticated cloud export is not yet verified because the teacher key was not entered into the export form; no secret was retrieved for testing. Complete alpha and beta report previews are publicly available at `/relatorios`.
 
-Remaining deployment steps after workspace authorization and browser verification:
+Deployment procedure (the import, database connection, and initial deployment are complete; schema activation, collection checks, and the Production teacher secret are complete; authenticated export verification remains):
 
 1. Import `kleberandrade/report-python-docx` into Vercel, set **Root Directory** to `web`, framework to Next.js, and Node.js to 22. The committed `vercel.json` pins `npm ci`, the build command, and São Paulo compute region.
 2. Create or connect a dedicated Neon **free** test database through the existing integration. If free provisioning is unavailable or terms/payment changes are requested, stop and obtain the user's decision.
@@ -93,6 +93,6 @@ Locally, 26 web tests passed with `CLASS_REPORT_PYTHON` set to the project Pytho
 
 The test suite covers payload schema boundaries, CSV content and formula neutralization, origin checks, oversized payloads, missing storage, successful/failed save outcomes, protected/empty exports, and key validation. Storage is mocked in endpoint tests; they do **not** certify a live Neon connection.
 
-Browser QA on the actual local production build checked the landing page, alpha submission errors with answers retained, beta on a 390 × 844 viewport, beta error state, unauthorized teacher export, and the complete report preview page. A real origin mismatch was reproduced in-browser, pinned by a failing regression test, and corrected. Successful submission UI and real database persistence still require the authorized live integration test. No physical phone, Microsoft Word, screen reader, or Lighthouse score is claimed.
+Browser QA on the actual local production build checked the landing page, alpha submission errors with answers retained, beta on a 390 × 844 viewport, beta error state, unauthorized teacher export, and the complete report preview page. A real origin mismatch was reproduced in-browser, pinned by a failing regression test, and corrected. Live browser tests also confirmed successful alpha and beta submissions and their persistence in the dedicated Neon database. The live export rejected an invalid key as expected. Authenticated live export remains unverified. No physical phone, Microsoft Word, screen reader, or Lighthouse score is claimed.
 
 Official references: [Next.js deployment on Vercel](https://vercel.com/docs/frameworks/full-stack/nextjs), [Neon with Next.js](https://neon.com/docs/guides/nextjs).
