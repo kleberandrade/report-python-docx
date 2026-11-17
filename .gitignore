@@ -114,3 +114,15 @@ reports/
 coverage.lcov
 !examples/*.docx
 *.inspect.ndjson
+
+# Web application
+node_modules/
+.next/
+.vercel/
+*.tsbuildinfo
+.env.*
+!.env.example
+!web/public/examples/*.png
+!previews/*.png
+!web/public/examples/*.docx
+!web/lib/

@@ -1,5 +1,7 @@
 # Verification record
 
+This section records the initial Python modernization baseline. The subsequent web/CSV release is documented in `web/README.md` and the follow-up section below.
+
 Verified locally on 17 November 2026 on macOS with Python 3.13.18.
 
 - `pytest`: 27 behavior tests passed. Coverage measured 263 of 265 statements (99% rounded). `__main__.py` was exercised in a subprocess, so its two statements are absent from the in-process coverage report. No coverage badge is asserted.
@@ -15,7 +17,7 @@ Verified locally on 17 November 2026 on macOS with Python 3.13.18.
 
 Generated `examples/alpha-report.docx` and `examples/beta-report.docx` from the synthetic XLSX fixtures with the bundled Python runtime (3.12.14). Rendered each with the documents runtime's `render_docx.py`, opened every resulting page image, removed an inherited title border, then regenerated, rendered, and inspected again. Each final example is one page. Confirmed readable accents, headings, table widths, cell padding, contrast, footer, and page number without visible clipping or overlap.
 
-This verifies the supplied example layouts in the available renderer. Microsoft Word, assistive technology, physical printing, long documents, and every possible font substitution were not tested. Tables have repeated header rows and headings use Word paragraph styles, but this is not a formal accessibility certification. The project has no graphical frontend; the CLI and generated DOCX are its user interfaces.
+This verifies the supplied example layouts in the available renderer. Microsoft Word, assistive technology, physical printing, long documents, and every possible font substitution were not tested. Tables have repeated header rows and headings use Word paragraph styles, but this is not a formal accessibility certification. At this initial verification point, the project had no graphical frontend; the subsequent optional web application is described below.
 
 ## Reproducibility and limits
 
@@ -28,3 +30,10 @@ Library generation expects records parsed by the loader for a single stage. The 
 GitHub default branch verified as `master`. Updated and read back the English About description and these nine topics: `academic-reports`, `cli`, `docx`, `education`, `excel`, `game-development`, `openpyxl`, `python`, `python-docx`. README links only to the actual workflow and branch.
 
 No Medium article or shortened tutorial URL was linked in the inspected original source/README, so no editorial publication was attempted. See `medium-update.pt-BR.md` for a concrete migration checklist if a corresponding article is subsequently identified. MIT license and the original author credit are preserved. No email, newsletter, package publication, or deployment was performed.
+
+
+## Web and CSV follow-up
+
+The follow-up passes 31 Python behavior tests and 26 web tests, including real web CSV exports consumed by the Python CLI and inspected as DOCX for both stages. Source/wheel build, production Next.js build, TypeScript, Ruff, and Prettier checks passed locally. The web application was inspected in the actual browser with desktop and 390×844 viewport layouts. Python data-boundary mutation tests killed 40 mutations; web form serialization and CSV mutation tests killed all 10 selected mutations. React component coverage and a web CRAP score were not measured.
+
+Cloud provisioning was stopped by native approval review before creating a Neon resource. A Vercel overdue billing notice was observed. No live Neon persistence, deployed URL, successful browser submission, or payment is claimed; those checks depend on the explicit resource-creation approval. Full reproduction and exact current limits are in `web/README.md`.

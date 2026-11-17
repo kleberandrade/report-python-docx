@@ -5,7 +5,26 @@
 [![CI](https://github.com/kleberandrade/report-python-docx/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/kleberandrade/report-python-docx/actions/workflows/ci.yml)
 [![MIT](https://img.shields.io/badge/License-MIT-555555)](LICENSE)
 
-Generate one Portuguese DOCX report per game from an Excel export of academic alpha or beta evaluations. The reusable Python package and CLI validate inputs before writing reports. Everything runs locally; there is no email delivery, file deletion command, plotting window, or external service.
+Generate one Portuguese DOCX report per game from an Excel export of academic alpha or beta evaluations. The reusable Python package and CLI validate inputs before writing reports. The Python generator runs locally without email delivery, deletion commands, or plotting windows. An optional Next.js web application collects the same evaluations in Neon and exports CSV files for the generator; it does not depend on Google Forms.
+
+## Optional web forms
+
+The [web application](web/README.md) includes alpha/beta questionnaires, complete synthetic report previews, and a protected teacher CSV export. Run it locally with Node.js 22:
+
+```sh
+cd web
+npm ci
+npm run dev
+```
+
+Open the printed local URL. To persist responses, configure a dedicated Neon database and the server-only variables described in `web/.env.example`, then run the idempotent schema migration. Without a database, submitting a form explicitly reports that no response was saved; it never simulates success. Deployment targets Vercel with **Root Directory = web**. See the web guide for exact setup, tested behavior, and current deployment status.
+
+After downloading an authorized export:
+
+```sh
+class-report alpha-evaluation.csv -o reports/alpha
+class-report beta-evaluation.csv --stage beta -o reports/beta
+```
 
 ## Requirements and installation
 
@@ -34,7 +53,7 @@ Open the included [alpha report](examples/alpha-report.docx) or [beta report](ex
 
 ## Input contract
 
-Use `.xlsx`, with headers on the first row of the active worksheet, or select a worksheet with `--sheet`. Header names are trimmed, case-sensitive Portuguese names. Additional unique columns are ignored. Duplicate headers are rejected. Entirely blank rows are ignored. Missing game names, scores, and categorical responses are errors. Comments may be blank. Scores must be finite numeric cells from 0 through 10; text numbers, booleans, formulas, and errors are rejected in numeric fields. Formulas are never evaluated. Save computed numeric results as values before importing.
+Use `.xlsx`, or a UTF-8 comma-separated `.csv` export from the web application, with headers on the first row of the active worksheet, or select a worksheet with `--sheet`. Header names are trimmed, case-sensitive Portuguese names. CSV numeric fields are parsed as numbers before applying the same validation; UTF-8 BOM and quoted multiline comments are supported. Worksheet selection only applies to XLSX. Additional unique columns are ignored. Duplicate headers are rejected. Entirely blank rows are ignored. Missing game names, scores, and categorical responses are errors. Comments may be blank. Scores must be finite numeric cells from 0 through 10; text numbers, booleans, formulas, and errors are rejected in numeric fields. Formulas are never evaluated. Save computed numeric results as values before importing.
 
 Alpha requires:
 
@@ -73,7 +92,7 @@ python -m pytest --cov=class_report --cov-report=term-missing
 ruff check src tests alpha_report.py beta_report_send_email.py
 ruff format --check src tests alpha_report.py beta_report_send_email.py
 python -m build --no-isolation
-python -m pip install --force-reinstall --no-deps dist/*.whl
+python -m pip install --force-reinstall --no-deps dist/class_report_docx-1.1.0-py3-none-any.whl
 class-report examples/alpha.xlsx -o reports/wheel-smoke
 ```
 
