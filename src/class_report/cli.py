@@ -11,8 +11,10 @@ from .report import generate_reports
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Generate local academic DOCX reports from XLSX.")
-    parser.add_argument("input", type=Path, help="Google Forms .xlsx export")
+    parser = argparse.ArgumentParser(
+        description="Generate local academic DOCX reports from XLSX or CSV."
+    )
+    parser.add_argument("input", type=Path, help="Local .xlsx workbook or web-form .csv export")
     parser.add_argument("--stage", choices=("alpha", "beta"), default="alpha")
     parser.add_argument("--sheet", help="Worksheet name (default: active worksheet)")
     parser.add_argument("-o", "--output", type=Path, default=Path("reports"))

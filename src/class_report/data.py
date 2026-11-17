@@ -1,5 +1,6 @@
 """Parse legacy Google Forms spreadsheets once, at the boundary."""
 
+import csv
 from collections import Counter
 from dataclasses import dataclass
 from math import isfinite
@@ -124,7 +125,7 @@ def parse_row(values, schema):
 
 
 def read_rows(sheet, schema):
-    rows = iter(sheet.values)
+    rows = iter(sheet)
     headers = tuple(text(v) for v in next(rows, ()))
     if len(set(headers)) != len(headers):
         raise ValueError("Duplicate columns in worksheet")
@@ -133,8 +134,10 @@ def read_rows(sheet, schema):
         raise ValueError("Missing columns: " + ", ".join(sorted(missing)))
     result = []
     for index, row in enumerate(rows, 2):
-        if all(v is None for v in row):
+        if all(v is None or v == "" for v in row):
             continue
+        if len(row) != len(headers):
+            raise ValueError(f"row {index}: expected {len(headers)} fields")
         try:
             result.append(parse_row(dict(zip(headers, row)), schema))
         except ValueError as error:
@@ -145,9 +148,14 @@ def read_rows(sheet, schema):
 
 
 def load_evaluations(path: Path, stage="alpha", sheet=None):
-    if Path(path).suffix.lower() != ".xlsx":
-        raise ValueError("Input must be an .xlsx file")
     schema = SCHEMAS[stage]
+    suffix = Path(path).suffix.lower()
+    if suffix == ".csv":
+        if sheet is not None:
+            raise ValueError("Worksheet selection is only available for XLSX input")
+        return load_csv(Path(path), schema)
+    if suffix != ".xlsx":
+        raise ValueError("Input must be an .xlsx or .csv file")
     try:
         book = load_workbook(path, read_only=True, data_only=False, keep_links=False)
     except (KeyError, SyntaxError) as error:
@@ -155,6 +163,31 @@ def load_evaluations(path: Path, stage="alpha", sheet=None):
     try:
         if sheet is not None and sheet not in book.sheetnames:
             raise ValueError(f"Worksheet not found: {sheet}")
-        return read_rows(book[sheet] if sheet else book.active, schema)
+        return read_rows((book[sheet] if sheet else book.active).values, schema)
     finally:
         book.close()
+
+
+def numeric_csv_rows(rows, schema):
+    headers = next(rows, [])
+    yield headers
+    numeric = set(schema.metrics)
+    if schema == BETA:
+        numeric.update(("Dificuldade", "Idade"))
+    positions = [i for i, header in enumerate(headers) if header.strip() in numeric]
+    for row in rows:
+        for index in positions:
+            if index < len(row):
+                try:
+                    row[index] = float(row[index])
+                except ValueError:
+                    pass  # Boundary validation reports the row and criterion.
+        yield row
+
+
+def load_csv(path, schema):
+    try:
+        with path.open(encoding="utf-8-sig", newline="") as stream:
+            return read_rows(numeric_csv_rows(csv.reader(stream, strict=True), schema), schema)
+    except (csv.Error, UnicodeError) as error:
+        raise ValueError("Invalid UTF-8 comma-separated CSV file") from error

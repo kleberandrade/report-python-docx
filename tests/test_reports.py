@@ -106,7 +106,7 @@ def test_duplicate_headers_sheet_selection_and_suffix(tmp_path):
         load_evaluations(workbook(tmp_path), sheet="Missing")
     assert len(load_evaluations(workbook(tmp_path), sheet="Sheet")) == 2
     with pytest.raises(ValueError, match=".xlsx"):
-        load_evaluations(tmp_path / "a.csv")
+        load_evaluations(tmp_path / "a.txt")
     with pytest.raises(ValueError, match="No evaluation"):
         generate_reports([], tmp_path / "out")
 
@@ -187,3 +187,56 @@ def test_invalid_ooxml_has_friendly_error(tmp_path, capsys):
     with pytest.raises(SystemExit) as error:
         main([str(path)])
     assert error.value.code == 2 and "error:" in capsys.readouterr().err
+
+
+def test_web_csv_roundtrip(tmp_path):
+    import csv
+
+    path = tmp_path / "alpha-evaluation.csv"
+    with path.open("w", encoding="utf-8-sig", newline="") as stream:
+        writer = csv.writer(stream)
+        writer.writerow(ALPHA.required)
+        writer.writerow(["Órbita", 8, 6, 10, "Sim", "Ação, música\nótima", "Menos R$ 10,00"])
+    items = load_evaluations(path)
+    assert items[0].scores == (8, 6, 10)
+    assert items[0].comments == ("Ação, música\nótima",)
+    assert generate_reports(items, tmp_path / "csv-output")[0].exists()
+
+
+def test_csv_invalid_score_and_empty_file(tmp_path):
+    import csv
+
+    path = tmp_path / "input.csv"
+    with path.open("w", encoding="utf-8", newline="") as stream:
+        writer = csv.writer(stream)
+        writer.writerow(ALPHA.required)
+        writer.writerow(["Jogo", "=8+1", 6, 10, "Sim", "", "Preço"])
+    with pytest.raises(ValueError, match="row 2.*Originalidade"):
+        load_evaluations(path)
+    path.write_text("")
+    with pytest.raises(ValueError, match="columns"):
+        load_evaluations(path)
+
+
+def test_csv_structure_sheet_and_encoding_errors(tmp_path):
+    path = tmp_path / "bad.csv"
+    path.write_text(",".join(ALPHA.required) + "\nJogo,8\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="row 2: expected"):
+        load_evaluations(path)
+    with pytest.raises(ValueError, match="Worksheet selection"):
+        load_evaluations(path, sheet="Sheet")
+    path.write_bytes(b"\xff\xfe")
+    with pytest.raises(ValueError, match="Invalid UTF-8"):
+        load_evaluations(path)
+
+
+def test_beta_csv_numeric_fields(tmp_path):
+    import csv
+
+    path = tmp_path / "beta.csv"
+    with path.open("w", encoding="utf-8", newline="") as stream:
+        writer = csv.writer(stream)
+        writer.writerow(BETA.required)
+        writer.writerow(["Órbita", 8, 9, 7, 6, 10, 5, "", "", 22, "Prefiro não informar"])
+    items = load_evaluations(path, stage="beta")
+    assert items[0].age == 22 and items[0].categories == ("Muito difícil",)
