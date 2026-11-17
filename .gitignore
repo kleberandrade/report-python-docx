@@ -126,3 +126,5 @@ node_modules/
 !previews/*.png
 !web/public/examples/*.docx
 !web/lib/
+# Private account setup screenshots stay local.
+previews/vercel-*.jpg

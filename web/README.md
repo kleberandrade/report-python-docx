@@ -53,9 +53,13 @@ The web application collects responses and exports data. DOCX generation runs in
 
 ## Vercel and Neon test deployment
 
-The intended project is `class-report-forms`, in the user's existing Vercel account. No cloud resource has been provisioned or deployment claimed by this initial implementation. A native approval check rejected the creation step as requiring explicit authorization for persistent Neon resources. The account also displayed an overdue billing notice; no payment, plan change, or upgrade was attempted.
+After explicit user approval, a dedicated Neon **Free** database named `class-report-forms` was provisioned in São Paulo (`gru1`). Auth and Realtime were disabled. Resource identifiers and account console links are intentionally kept out of public documentation.
 
-Once explicitly authorized:
+No website deployment is claimed yet. Hosting is awaiting confirmation of a workspace compatible with the user's no-paid-services constraint. No plan changes, upgrades, or payments were attempted.
+
+The database editor requires direct identity verification by the account owner. No verification code or connection secret was requested in chat. The schema migration has **not** been applied, no application connection has been configured, and no successful cloud submission is claimed.
+
+Remaining deployment steps after workspace authorization and browser verification:
 
 1. Import `kleberandrade/report-python-docx` into Vercel, set **Root Directory** to `web`, framework to Next.js, and Node.js to 22. The committed `vercel.json` pins `npm ci`, the build command, and São Paulo compute region.
 2. Create or connect a dedicated Neon **free** test database through the existing integration. If free provisioning is unavailable or terms/payment changes are requested, stop and obtain the user's decision.

@@ -37,3 +37,8 @@ No Medium article or shortened tutorial URL was linked in the inspected original
 The follow-up passes 31 Python behavior tests and 26 web tests, including real web CSV exports consumed by the Python CLI and inspected as DOCX for both stages. Source/wheel build, production Next.js build, TypeScript, Ruff, and Prettier checks passed locally. The web application was inspected in the actual browser with desktop and 390×844 viewport layouts. Python data-boundary mutation tests killed 40 mutations; web form serialization and CSV mutation tests killed all 10 selected mutations. React component coverage and a web CRAP score were not measured.
 
 Cloud provisioning was stopped by native approval review before creating a Neon resource. A Vercel overdue billing notice was observed. No live Neon persistence, deployed URL, successful browser submission, or payment is claimed; those checks depend on the explicit resource-creation approval. Full reproduction and exact current limits are in `web/README.md`.
+
+
+## Cloud provisioning status after explicit approval
+
+A dedicated Neon Free database `class-report-forms` was successfully provisioned in `gru1` with Auth/Realtime off. Site creation is awaiting confirmation of a workspace compatible with the no-paid-services constraint. Database access requires direct owner identity verification. No schema application, site deployment, or live persistence verification has yet occurred. The previously recorded local tests and successful GitHub CI remain the latest software verification results. Private resource and account metadata are excluded from this public record.
